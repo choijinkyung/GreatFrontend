@@ -23,3 +23,25 @@ export default function deepClone(value) {
   }
   return cloned;
 }
+
+export default function deepClone(value) {
+  if (value === null || typeof value !== "object") {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => deepClone(item));
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).map(([key, val]) => [key, deepClone(val)])
+  );
+}
+/**
+ * 1. 타입 확인
+ *  - 숫자, 문자열, boolean, null, undefined return value
+ *  - 순환 참조 처리
+ *  - 배열 복제
+ *  - 일반 객체 복제
+ *  - 특수 객체 복제
+ */
