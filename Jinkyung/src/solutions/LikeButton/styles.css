@@ -1,0 +1,17 @@
+body {
+    font-family: sans-serif;
+}
+
+.liked-button {
+    color: #fff;
+    background-color: #f00;
+}
+
+.default-button {
+    color: #888;
+}
+
+.default-button:hover {
+    border-color: #f00;
+    color: #f00;
+}
