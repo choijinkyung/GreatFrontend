@@ -7,7 +7,6 @@ export default function ComboBox() {
   const [filterFilms, setFilterFilms] = React.useState([]);
 
   function handleChange(e) {
-    e.preventDefault();
     setSearchFilter(e.target.value);
     setIsOpen(true);
   }
