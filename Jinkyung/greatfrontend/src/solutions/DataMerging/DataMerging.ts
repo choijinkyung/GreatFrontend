@@ -2,35 +2,35 @@
  * @param {Array<{user: number, duration: number, equipment: Array<string>}>} sessions
  * @return {Array}
  */
-export default function mergeData(sessions) {
-    let results = [];
-    const sessionsForUser = new Map()
+type session = {
+  user: number;
+  duration: number;
+  equipment: Array<string>;
+};
+export default function mergeData(sessions: Array<session>) {
+  // throw 'Not implemented!';
+  const result = new Map();
 
-    for (let session of sessions) {
-        if (sessionsForUser.has(session.user)) {
-            const userSession = sessionsForUser.get(session.user)
-            userSession.duration += session.duration;
-            //equipment 배열에 넣기, 중복없이 
-            session.equipment.forEach((equipment) => {
-                userSession.equipment.add(equipment)
-            })
-        } else {//처음본 경우
-            let clonedData = {
-                ...session,
-                equipment: new Set(session.equipment) //원본배열을 그대로 쓰면 side effect발생
-            }
-            sessionsForUser.set(session.user, clonedData)
-            //처음 발견시 result에 넣어줌
-            results.push(clonedData);
-
-        }
+  sessions.forEach((session) => {
+    if (result.has(session.user)) {
+      const origin = result.get(session.user);
+      origin.duration += session.duration;
+      origin.equipment = [
+        ...new Set([...origin.equipment, ...session.equipment]),
+      ].sort();
+      // origin.equipment = [...origin.equipment,session.equipment]
+    } else {
+      result.set(session.user, {
+        user: session.user,
+        duration: session.duration,
+        equipment: [...session.equipment],
+      });
     }
-    return results.map((session) => ({
-        ...session, equipment: Array.from(session.equipment).sort()
-    }))
+  });
+  console.log(result);
+  return Array.from(result.values());
 }
 
-/**
- * sum - duration
- * combine all equipment used,de-duplicate, sorting alpahbetically
- */
+//1. 유저 세션 같은거 찾기, duration은 더하고, equipment는 붙이는데, 중복 제거
+//2. 유저 세션 같은 거 찾기 -> set에 없으면 넣고 있으면 더하기.
+//3. 중복 제거는 set
